@@ -28,14 +28,24 @@ def handle_books():
         db.session.commit()
         return make_response(f"Book {new_book.title} successfully created.", 201)
 
-@books_bp.route("/<book_id>", methods=["GET"])
+@books_bp.route("/<book_id>", methods=["GET", "PUT"])
 def handle_book(book_id):
     book = Book.query.get(book_id)
-    return {
-        "id": book.id,
-        "title": book.title,
-        "description": book.description
-    }
+    if request.method == "GET":
+        return {
+            "id": book.id,
+            "title": book.title,
+            "description": book.description
+        }
+    elif request.method == "PUT":
+        form_data = request.get_json()
+
+        book.title = form_data["title"]
+        book.description = form_data["description"]
+
+        db.session.commit()
+
+        return make_response(f"Book #{book.id} succesfully updated.")
 
 @hello_world_bp.route('/hello-world', methods=["GET"])
 def say_hello_world():
