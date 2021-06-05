@@ -28,7 +28,7 @@ def handle_books():
         db.session.commit()
         return make_response(f"Book {new_book.title} successfully created.", 201)
 
-@books_bp.route("/<book_id>", methods=["GET", "PUT"])
+@books_bp.route("/<book_id>", methods=["GET", "PUT", "DELETE"])
 def handle_book(book_id):
     book = Book.query.get(book_id)
     if request.method == "GET":
@@ -39,13 +39,14 @@ def handle_book(book_id):
         }
     elif request.method == "PUT":
         form_data = request.get_json()
-
         book.title = form_data["title"]
         book.description = form_data["description"]
-
         db.session.commit()
-
         return make_response(f"Book #{book.id} succesfully updated.")
+    elif request.method == "DELETE":
+        db.session.delete(book)
+        db.session.commit()
+        return make_response(f"Book #{book.id} successfully deleted.")
 
 @hello_world_bp.route('/hello-world', methods=["GET"])
 def say_hello_world():
