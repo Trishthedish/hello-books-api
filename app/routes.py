@@ -34,36 +34,24 @@ def handle_books():
 @books_bp.route("/<book_id>", methods=["GET", "PUT", "DELETE"])
 def handle_book(book_id):
     book = Book.query.get(book_id)
+    if book is None:
+        return make_response("", 404)
+
     if request.method == "GET":
         return {
             "id": book.id,
             "title": book.title,
             "description": book.description
         }
+
     elif request.method == "PUT":
         form_data = request.get_json()
         book.title = form_data["title"]
         book.description = form_data["description"]
         db.session.commit()
         return make_response(f"Book #{book.id} succesfully updated.")
+
     elif request.method == "DELETE":
         db.session.delete(book)
         db.session.commit()
         return make_response(f"Book #{book.id} successfully deleted.")
-
-@hello_world_bp.route('/hello-world', methods=["GET"])
-def say_hello_world():
-    my_beautiful_response_body = "Hello World"
-    return my_beautiful_response_body
-
-@hello_world_bp.route("/hello-world/JSON", methods=["GET"])
-def say_hello_json():
-    return {
-        "name": "Trish",
-        "message": "It does not do well to dwell on dreams and forget to live.",
-        "hobbies": [
-            "Fishing",
-            "Swimming",
-            "Hanging out with Chickens"
-        ]
-    }
