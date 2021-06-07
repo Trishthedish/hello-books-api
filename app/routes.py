@@ -21,8 +21,8 @@ def handle_books():
                 "description": book.description
             })
         return jsonify(books_response)
-
     elif request.method == "POST":
+
         request_body = request.get_json(request.data)
         if not "title" in request_body.keys() or not "description" in request_body.keys():
             return make_response("", 422)
