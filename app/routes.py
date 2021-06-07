@@ -7,6 +7,7 @@ books_bp = Blueprint("books", __name__, url_prefix="/books")
 @books_bp.route("", methods=["GET","POST"])
 def handle_books():
     if request.method == "GET":
+
         title_query = request.args.get("title")
         if title_query:
             books = Book.query.filter_by(title=title_query)
@@ -40,6 +41,7 @@ def handle_book(book_id):
         return make_response("", 404)
 
     if request.method == "GET":
+
         return {
             "id": book.id,
             "title": book.title,
@@ -47,6 +49,7 @@ def handle_book(book_id):
         }
 
     elif request.method == "PUT":
+
         form_data = request.get_json()
         book.title = form_data["title"]
         book.description = form_data["description"]
