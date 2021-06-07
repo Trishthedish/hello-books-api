@@ -4,12 +4,15 @@ from app.models.book import Book
 from flask import request, Blueprint, make_response, jsonify
 
 books_bp = Blueprint("books", __name__, url_prefix="/books")
-hello_world_bp = Blueprint("hello_world", __name__)
 
 @books_bp.route("", methods=["GET","POST"])
 def handle_books():
     if request.method == "GET":
-        books = Book.query.all()
+        title_query = request.args.get("title")
+        if title_query:
+            books = Book.query.filter_by(title=title_query)
+        else:
+            books = Book.query.all()
         books_response = []
         for book in books:
             books_response.append({
