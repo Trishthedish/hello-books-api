@@ -31,3 +31,12 @@ def two_saved_books(app):
     )
     db.session.add_all([ocean_book, mountain_book])
     db.session.commit()
+
+@pytest.fixture
+def one_saved_book(app):
+    parable_of_the_sower = Book(
+        title="Parable of the Sower",
+        description="The first book in Octavia Butler's EatherSeed ScFi Series"
+    )
+    db.session.add(parable_of_the_sower)
+    db.session.commit()
