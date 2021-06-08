@@ -26,6 +26,7 @@ def handle_books():
         request_body = request.get_json(request.data)
         if not "title" in request_body.keys() or not "description" in request_body.keys():
             return make_response("", 422)
+
         new_book = Book(
             title=request_body["title"],
             description=request_body["description"]
